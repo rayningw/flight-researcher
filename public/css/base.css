@@ -1,0 +1,14 @@
+
+.table .row div {
+  display: inline-block;
+  padding: 5px;
+  border: 1px solid gray;
+}
+
+.table .row div:not(:first-child) {
+  border-left: none;
+}
+
+.table .header.row div {
+  font-weight: bold;
+}
