@@ -79,6 +79,51 @@ var App = React.createClass({
                       rows={this.state.datePairs}
                       onUpdate={makeHandleUpdate('datePairs', this.props.datePairsUrl)}
                       type="date" />
+        <GoBox airportPairs={this.state.airportPairs} datePairs={this.state.datePairs} />
+      </div>
+    );
+  }
+
+});
+
+var GoBox = React.createClass({
+
+  generateUrls: function() {
+    var urls = [];
+    this.props.airportPairs.forEach(function(airportPair) {
+      this.props.datePairs.forEach(function(datePair) {
+        var url = 'https://www.google.com/flights/#search;f=' +
+                  airportPair.values[0] + ';t=' + airportPair.values[1] + ';d=' +
+                  datePair.values[0] + ';r=' + datePair.values[1];
+        urls.push(url);
+      }, this);
+    }, this);
+    return urls;
+  },
+
+  handleOpenAll: function() {
+    this.generateUrls().forEach(function(url) {
+      window.open(url, '_blank');
+    }, this);
+  },
+
+  render: function() {
+    var linkNodes = this.generateUrls().map(function(url) {
+      return (
+        <li><a href={url} target='_blank'>{url}</a></li>
+      );
+    });
+
+    return (
+      <div className="go-box">
+        <div className="heading">Generated URLs</div>
+        <ul>
+          {linkNodes}
+        </ul>
+        <div className="open-all">
+          <div>This will open {linkNodes.length} tabs (you may have to disable your popup blocker):</div>
+          <button onClick={this.handleOpenAll}>Open All</button>
+        </div>
       </div>
     );
   }

@@ -7,6 +7,19 @@
   font-weight: bold;
 }
 
+.go-box {
+  margin: 30px 10px;
+}
+
+.go-box .heading {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.go-box .open-all {
+  margin-top: 30px;
+}
+
 .table {
   display: inline-block;
 }
