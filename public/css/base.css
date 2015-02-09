@@ -20,17 +20,26 @@
   border-top: none;
 }
 
-.table .row div {
+.table .row > div {
   display: inline-block;
   padding: 5px;
   border-left: 1px solid gray;
   border-right: 1px solid gray;
 }
 
-.table .row div:not(:first-child) {
+.table .row > div:not(:first-child) {
   border-left: none;
 }
 
-.table .header.row div {
+.table .header.row > div {
   font-weight: bold;
+}
+
+.actions {
+  text-align: center;
+}
+
+.action {
+  margin: 0px 5px;
+  cursor: pointer;
 }

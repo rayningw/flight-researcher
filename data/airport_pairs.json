@@ -1,6 +1,1 @@
-[
-  {"values": ["SFO", "BWI"]},
-  {"values": ["OAK", "BWI"]},
-  {"values": ["BWI", "SFO"]},
-  {"values": ["BWI", "OAK"]}
-]
+[{"values":["SFO","BWI"]},{"values":["OAK","BWI"]},{"values":["BWI","SFO"]},{"values":["BWI","OAK"]}]
