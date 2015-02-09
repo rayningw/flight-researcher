@@ -1,0 +1,6 @@
+[
+  {"values": ["SFO", "BWI"]},
+  {"values": ["OAK", "BWI"]},
+  {"values": ["BWI", "SFO"]},
+  {"values": ["BWI", "OAK"]}
+]

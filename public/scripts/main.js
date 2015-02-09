@@ -4,6 +4,45 @@ function assert(condition, msg) {
   }
 }
 
+var AIRPORT_PAIRS_URL = "/api/v1/airport_pairs";
+var DATE_PAIRS_URL = "/api/v1/date_pairs";
+
+var ParameterBox = React.createClass({
+
+  loadTable: function() {
+    console.log('Loading table for: ' + this.props.label);
+
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      success: function(data) {
+        this.setState({rows: data.rows});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+
+  getInitialState: function() {
+    return {rows: []};
+  },
+
+  componentDidMount: function() {
+    this.loadTable();
+  },
+
+  render: function() {
+    return (
+      <div className="parameter-box">
+        <div className="label">{this.props.label}</div>
+        <Table headings={this.props.headings} rows={this.state.rows} />
+      </div>
+    );
+  }
+
+});
+
 var Table = React.createClass({
 
   render: function() {
@@ -35,14 +74,11 @@ var Table = React.createClass({
 
 });
 
-var DUMMY_AIRPORT_PAIRS = [
-  {values: ['SFO', 'BWI']},
-  {values: ['OAK', 'BWI']},
-  {values: ['BWI', 'SFO']},
-  {values: ['BWI', 'OAK']}
-];
-
 React.render(
-  <Table headings={["From", "To"]} rows={DUMMY_AIRPORT_PAIRS} />,
+  <div>
+    <ParameterBox label="Airport Pairs" headings={["From", "To"]} url={AIRPORT_PAIRS_URL} />
+    <ParameterBox label="Dates" headings={["Depart", "Return"]} url={DATE_PAIRS_URL} />
+  </div>,
   document.getElementById('content')
 );
+

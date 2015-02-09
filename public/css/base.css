@@ -1,8 +1,30 @@
+.parameter-box {
+  margin: 30px 10px;
+}
+
+.parameter-box .label {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.table {
+  display: inline-block;
+}
+
+.table .row {
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+}
+
+.table .row:not(:first-child) {
+  border-top: none;
+}
 
 .table .row div {
   display: inline-block;
   padding: 5px;
-  border: 1px solid gray;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
 }
 
 .table .row div:not(:first-child) {
