@@ -58,7 +58,7 @@ var ParameterBox = React.createClass({
     return (
       <div className="parameter-box">
         <div className="label">{this.props.label}</div>
-        <Table headings={this.props.headings} rows={this.state.rows} onUpdate={this.handleUpdate} />
+        <Table headings={this.props.headings} rows={this.state.rows} type={this.props.type} onUpdate={this.handleUpdate} />
       </div>
     );
   }
@@ -102,10 +102,10 @@ var TableRow = React.createClass({
       return (
         <div className="row">
           <div style={{width: this.props.colWidth}}>
-            <input ref="value1" type="text" defaultValue={this.props.values[0]}></input>
+            <input ref="value1" type={this.props.type} defaultValue={this.props.values[0]}></input>
           </div>
           <div style={{width: this.props.colWidth}}>
-            <input ref="value2" type="text" defaultValue={this.props.values[1]}></input>
+            <input ref="value2" type={this.props.type} defaultValue={this.props.values[1]}></input>
           </div>
           <div className="actions" style={{width: this.props.actionsColWidth}}>
             <a href="#" className="action" onClick={this.handleSave}>Save</a>
@@ -156,6 +156,7 @@ var Table = React.createClass({
       }.bind(this);
 
       return <TableRow key={idx}
+                       type={this.props.type}
                        colWidth={colWidth}
                        actionsColWidth={ACTIONS_COL_WIDTH}
                        values={row.values}
@@ -172,6 +173,7 @@ var Table = React.createClass({
 
     var addRowNode = (
       <TableRow key={this.props.rows.length}
+                type={this.props.type}
                 colWidth={colWidth}
                 actionsColWidth={ACTIONS_COL_WIDTH}
                 values={['', '']}
@@ -201,8 +203,8 @@ var Table = React.createClass({
 
 React.render(
   <div>
-    <ParameterBox label="Airport Pairs" headings={["From", "To"]} url={AIRPORT_PAIRS_URL} />
-    <ParameterBox label="Dates" headings={["Depart", "Return"]} url={DATE_PAIRS_URL} />
+    <ParameterBox label="Airport Pairs" headings={["From", "To"]} url={AIRPORT_PAIRS_URL} type="text" />
+    <ParameterBox label="Dates" headings={["Depart", "Return"]} url={DATE_PAIRS_URL} type="date" />
   </div>,
   document.getElementById('content')
 );
