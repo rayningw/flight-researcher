@@ -7,58 +7,91 @@ function assert(condition, msg) {
 var AIRPORT_PAIRS_URL = "/api/v1/airport_pairs";
 var DATE_PAIRS_URL = "/api/v1/date_pairs";
 
-var ParameterBox = React.createClass({
+var App = React.createClass({
 
   getInitialState: function() {
-    return {rows: []};
+    return {
+      airportPairs: [],
+      datePairs: []
+    };
   },
 
   componentDidMount: function() {
-    this.loadTable();
+    this.loadTable('airportPairs', this.props.airportPairsUrl);
+    this.loadTable('datePairs', this.props.datePairsUrl);
   },
 
-  loadTable: function() {
-    console.log('Loading table for: ' + this.props.label);
+  loadTable: function(key, url) {
+    console.log('Loading table for: ' + key);
 
     $.ajax({
-      url: this.props.url,
+      url: url,
       dataType: 'json',
       success: function(data) {
-        this.setState({rows: data.rows});
+        var newState = {};
+        newState[key] = data.rows;
+        this.setState(newState);
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        console.error(url, status, err.toString());
       }.bind(this)
     });
   },
 
-  saveTable: function(rows) {
-    console.log('Saving table for: ' + this.props.label);
+  saveTable: function(key, url, rows) {
+    console.log('Saving table for: ' + key);
 
     $.ajax({
-      url: this.props.url,
+      url: url,
       type: 'POST',
       contentType: 'application/json',
       data: JSON.stringify({
         rows: rows
       }),
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        console.error(url, status, err.toString());
       }.bind(this)
     });
   },
 
-  handleUpdate: function(newRows) {
-    console.log('Saving: ' + this.props.label + ' with:', newRows);
-    this.setState({rows: newRows});
-    this.saveTable(newRows);
-  },
+  render: function() {
+    var makeHandleUpdate = function(key, url) {
+      return function(newRows) {
+        console.log('Updating: ' + key + ' with:', newRows);
+
+        var newState = {};
+        newState[key] = newRows;
+        this.setState(newState);
+
+        this.saveTable(key, url, newRows);
+      }.bind(this);
+    }.bind(this);
+
+    return (
+      <div>
+        <ParameterBox label="Airport Pairs"
+                      headings={["From", "To"]}
+                      rows={this.state.airportPairs}
+                      onUpdate={makeHandleUpdate('airportPairs', this.props.airportPairsUrl)}
+                      type="text" />
+        <ParameterBox label="Dates"
+                      headings={["Depart", "Return"]}
+                      rows={this.state.datePairs}
+                      onUpdate={makeHandleUpdate('datePairs', this.props.datePairsUrl)}
+                      type="date" />
+      </div>
+    );
+  }
+
+});
+
+var ParameterBox = React.createClass({
 
   render: function() {
     return (
       <div className="parameter-box">
         <div className="label">{this.props.label}</div>
-        <Table headings={this.props.headings} rows={this.state.rows} type={this.props.type} onUpdate={this.handleUpdate} />
+        <Table headings={this.props.headings} rows={this.props.rows} type={this.props.type} onUpdate={this.props.onUpdate} />
       </div>
     );
   }
@@ -202,10 +235,7 @@ var Table = React.createClass({
 });
 
 React.render(
-  <div>
-    <ParameterBox label="Airport Pairs" headings={["From", "To"]} url={AIRPORT_PAIRS_URL} type="text" />
-    <ParameterBox label="Dates" headings={["Depart", "Return"]} url={DATE_PAIRS_URL} type="date" />
-  </div>,
+  <App airportPairsUrl={AIRPORT_PAIRS_URL} datePairsUrl={DATE_PAIRS_URL} />,
   document.getElementById('content')
 );
 
