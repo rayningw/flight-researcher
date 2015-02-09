@@ -68,7 +68,7 @@ var ParameterBox = React.createClass({
 var TableRow = React.createClass({
 
   getInitialState: function() {
-    return {isEdit: false}
+    return {isEdit: this.props.isEdit}
   },
 
   handleEdit: function(event) {
@@ -139,6 +139,7 @@ var Table = React.createClass({
     var width = this.props.width || 300;
     var colWidth = width / 2;
 
+    // Existing rows
     var rowNodes = this.props.rows.map(function(row, idx) {
       var handleUpdate = function(newValues) {
         var newRows = this.props.rows.slice();
@@ -162,6 +163,24 @@ var Table = React.createClass({
                        onDelete={handleDelete} />
     }.bind(this));
 
+    // New row to add
+    var handleAdd = function(values) {
+      var newRows = this.props.rows.slice();
+      newRows.push({values: values});
+      this.props.onUpdate(newRows);
+    }.bind(this);
+
+    var addRowNode = (
+      <TableRow key={this.props.rows.length}
+                colWidth={colWidth}
+                actionsColWidth={ACTIONS_COL_WIDTH}
+                values={['', '']}
+                onUpdate={handleAdd}
+                onDelete={$.noop}
+                isEdit={true} />
+    );
+
+    // Heading and rows
     return (
       <div className="table">
         <div className="header row">
@@ -171,6 +190,9 @@ var Table = React.createClass({
         </div>
 
         {rowNodes}
+
+        {addRowNode}
+
       </div>
     );
   }
